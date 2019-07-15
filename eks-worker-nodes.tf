@@ -7,8 +7,8 @@
 #  * AutoScaling Group to launch worker instances
 #
 
-resource "aws_iam_role" "demo-node" {
-  name = "terraform-eks-demo-node"
+resource "aws_iam_role" "dockup-node" {
+  name = "terraform-eks-dockup-node"
 
   assume_role_policy = <<POLICY
 {
@@ -26,30 +26,30 @@ resource "aws_iam_role" "demo-node" {
 POLICY
 }
 
-resource "aws_iam_role_policy_attachment" "demo-node-AmazonEKSWorkerNodePolicy" {
+resource "aws_iam_role_policy_attachment" "dockup-node-AmazonEKSWorkerNodePolicy" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy"
-  role       = "${aws_iam_role.demo-node.name}"
+  role       = "${aws_iam_role.dockup-node.name}"
 }
 
-resource "aws_iam_role_policy_attachment" "demo-node-AmazonEKS_CNI_Policy" {
+resource "aws_iam_role_policy_attachment" "dockup-node-AmazonEKS_CNI_Policy" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy"
-  role       = "${aws_iam_role.demo-node.name}"
+  role       = "${aws_iam_role.dockup-node.name}"
 }
 
-resource "aws_iam_role_policy_attachment" "demo-node-AmazonEC2ContainerRegistryReadOnly" {
+resource "aws_iam_role_policy_attachment" "dockup-node-AmazonEC2ContainerRegistryReadOnly" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
-  role       = "${aws_iam_role.demo-node.name}"
+  role       = "${aws_iam_role.dockup-node.name}"
 }
 
-resource "aws_iam_instance_profile" "demo-node" {
-  name = "terraform-eks-demo"
-  role = "${aws_iam_role.demo-node.name}"
+resource "aws_iam_instance_profile" "dockup-node" {
+  name = "terraform-eks-dockup"
+  role = "${aws_iam_role.dockup-node.name}"
 }
 
-resource "aws_security_group" "demo-node" {
-  name        = "terraform-eks-demo-node"
+resource "aws_security_group" "dockup-node" {
+  name        = "terraform-eks-dockup-node"
   description = "Security group for all nodes in the cluster"
-  vpc_id      = "${aws_vpc.demo.id}"
+  vpc_id      = "${aws_vpc.dockup.id}"
 
   egress {
     from_port   = 0
@@ -60,28 +60,28 @@ resource "aws_security_group" "demo-node" {
 
   tags = "${
     map(
-     "Name", "terraform-eks-demo-node",
+     "Name", "terraform-eks-dockup-node",
      "kubernetes.io/cluster/${var.cluster-name}", "owned",
     )
   }"
 }
 
-resource "aws_security_group_rule" "demo-node-ingress-self" {
+resource "aws_security_group_rule" "dockup-node-ingress-self" {
   description              = "Allow node to communicate with each other"
   from_port                = 0
   protocol                 = "-1"
-  security_group_id        = "${aws_security_group.demo-node.id}"
-  source_security_group_id = "${aws_security_group.demo-node.id}"
+  security_group_id        = "${aws_security_group.dockup-node.id}"
+  source_security_group_id = "${aws_security_group.dockup-node.id}"
   to_port                  = 65535
   type                     = "ingress"
 }
 
-resource "aws_security_group_rule" "demo-node-ingress-cluster" {
+resource "aws_security_group_rule" "dockup-node-ingress-cluster" {
   description              = "Allow worker Kubelets and pods to receive communication from the cluster control plane"
   from_port                = 1025
   protocol                 = "tcp"
-  security_group_id        = "${aws_security_group.demo-node.id}"
-  source_security_group_id = "${aws_security_group.demo-cluster.id}"
+  security_group_id        = "${aws_security_group.dockup-node.id}"
+  source_security_group_id = "${aws_security_group.dockup-cluster.id}"
   to_port                  = 65535
   type                     = "ingress"
 }
@@ -89,7 +89,7 @@ resource "aws_security_group_rule" "demo-node-ingress-cluster" {
 data "aws_ami" "eks-worker" {
   filter {
     name   = "name"
-    values = ["amazon-eks-node-${aws_eks_cluster.demo.version}-v*"]
+    values = ["amazon-eks-node-${aws_eks_cluster.dockup.version}-v*"]
   }
 
   most_recent = true
@@ -102,38 +102,38 @@ data "aws_ami" "eks-worker" {
 # information into the AutoScaling Launch Configuration.
 # More information: https://docs.aws.amazon.com/eks/latest/userguide/launch-workers.html
 locals {
-  demo-node-userdata = <<USERDATA
+  dockup-node-userdata = <<USERDATA
 #!/bin/bash
 set -o xtrace
-/etc/eks/bootstrap.sh --apiserver-endpoint '${aws_eks_cluster.demo.endpoint}' --b64-cluster-ca '${aws_eks_cluster.demo.certificate_authority.0.data}' '${var.cluster-name}'
+/etc/eks/bootstrap.sh --apiserver-endpoint '${aws_eks_cluster.dockup.endpoint}' --b64-cluster-ca '${aws_eks_cluster.dockup.certificate_authority.0.data}' '${var.cluster-name}'
 USERDATA
 }
 
-resource "aws_launch_configuration" "demo" {
+resource "aws_launch_configuration" "dockup" {
   associate_public_ip_address = true
-  iam_instance_profile        = "${aws_iam_instance_profile.demo-node.name}"
+  iam_instance_profile        = "${aws_iam_instance_profile.dockup-node.name}"
   image_id                    = "${data.aws_ami.eks-worker.id}"
   instance_type               = "m4.large"
-  name_prefix                 = "terraform-eks-demo"
-  security_groups             = ["${aws_security_group.demo-node.id}"]
-  user_data_base64            = "${base64encode(local.demo-node-userdata)}"
+  name_prefix                 = "terraform-eks-dockup"
+  security_groups             = ["${aws_security_group.dockup-node.id}"]
+  user_data_base64            = "${base64encode(local.dockup-node-userdata)}"
 
   lifecycle {
     create_before_destroy = true
   }
 }
 
-resource "aws_autoscaling_group" "demo" {
+resource "aws_autoscaling_group" "dockup" {
   desired_capacity     = 2
-  launch_configuration = "${aws_launch_configuration.demo.id}"
+  launch_configuration = "${aws_launch_configuration.dockup.id}"
   max_size             = 2
   min_size             = 1
-  name                 = "terraform-eks-demo"
-  vpc_zone_identifier  = ["${aws_subnet.demo.*.id}"]
+  name                 = "terraform-eks-dockup"
+  vpc_zone_identifier  = ["${aws_subnet.dockup.*.id}"]
 
   tag {
     key                 = "Name"
-    value               = "terraform-eks-demo"
+    value               = "terraform-eks-dockup"
     propagate_at_launch = true
   }
 
