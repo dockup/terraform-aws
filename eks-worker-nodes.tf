@@ -129,7 +129,7 @@ resource "aws_autoscaling_group" "dockup" {
   max_size             = 2
   min_size             = 1
   name                 = "terraform-eks-dockup"
-  vpc_zone_identifier  = ["${aws_subnet.dockup.*.id}"]
+  vpc_zone_identifier  = flatten(["${aws_subnet.dockup.*.id}"])
 
   tag {
     key                 = "Name"

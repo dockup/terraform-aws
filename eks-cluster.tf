@@ -77,7 +77,7 @@ resource "aws_eks_cluster" "dockup" {
 
   vpc_config {
     security_group_ids = ["${aws_security_group.dockup-cluster.id}"]
-    subnet_ids         = ["${aws_subnet.dockup.*.id}"]
+    subnet_ids         = flatten(["${aws_subnet.dockup.*.id}"])
   }
 
   depends_on = [
