@@ -10,3 +10,7 @@ variable "cluster-name" {
 variable "organization-name" {
   type = "string"
 }
+
+variable "agent-api-key" {
+  type = "string"
+}
