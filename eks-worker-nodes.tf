@@ -8,7 +8,7 @@
 #
 
 resource "aws_iam_role" "dockup-node" {
-  name = "terraform-eks-dockup-node"
+  name = "${var.cluster-name}-node"
 
   assume_role_policy = <<POLICY
 {
@@ -42,12 +42,12 @@ resource "aws_iam_role_policy_attachment" "dockup-node-AmazonEC2ContainerRegistr
 }
 
 resource "aws_iam_instance_profile" "dockup-node" {
-  name = "terraform-eks-dockup"
+  name = "${var.cluster-name}"
   role = "${aws_iam_role.dockup-node.name}"
 }
 
 resource "aws_security_group" "dockup-node" {
-  name        = "terraform-eks-dockup-node"
+  name        = "${var.cluster-name}-node"
   description = "Security group for all nodes in the cluster"
   vpc_id      = "${aws_vpc.dockup.id}"
 
@@ -60,7 +60,7 @@ resource "aws_security_group" "dockup-node" {
 
   tags = "${
     map(
-     "Name", "terraform-eks-dockup-node",
+     "Name", "${var.cluster-name}-node",
      "kubernetes.io/cluster/${var.cluster-name}", "owned",
     )
   }"
@@ -114,7 +114,7 @@ resource "aws_launch_configuration" "dockup" {
   iam_instance_profile        = "${aws_iam_instance_profile.dockup-node.name}"
   image_id                    = "${data.aws_ami.eks-worker.id}"
   instance_type               = "m4.large"
-  name_prefix                 = "terraform-eks-dockup"
+  name_prefix                 = "${var.cluster-name}"
   security_groups             = ["${aws_security_group.dockup-node.id}"]
   user_data_base64            = "${base64encode(local.dockup-node-userdata)}"
 
@@ -128,12 +128,12 @@ resource "aws_autoscaling_group" "dockup" {
   launch_configuration = "${aws_launch_configuration.dockup.id}"
   max_size             = 2
   min_size             = 1
-  name                 = "terraform-eks-dockup"
+  name                 = "${var.cluster-name}"
   vpc_zone_identifier  = flatten(["${aws_subnet.dockup.*.id}"])
 
   tag {
     key                 = "Name"
-    value               = "terraform-eks-dockup"
+    value               = "${var.cluster-name}"
     propagate_at_launch = true
   }
 

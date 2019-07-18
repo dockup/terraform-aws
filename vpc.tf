@@ -11,7 +11,7 @@ resource "aws_vpc" "dockup" {
 
   tags = "${
     map(
-      "Name", "terraform-eks-dockup-node",
+      "Name", "${var.cluster-name}-node",
       "kubernetes.io/cluster/${var.cluster-name}", "shared",
     )
   }"
@@ -26,7 +26,7 @@ resource "aws_subnet" "dockup" {
 
   tags = "${
     map(
-      "Name", "terraform-eks-dockup-node",
+      "Name", "${var.cluster-name}-node",
       "kubernetes.io/cluster/${var.cluster-name}", "shared",
     )
   }"
@@ -36,7 +36,7 @@ resource "aws_internet_gateway" "dockup" {
   vpc_id = "${aws_vpc.dockup.id}"
 
   tags = {
-    Name = "terraform-eks-dockup"
+    Name = "${var.cluster-name}"
   }
 }
 

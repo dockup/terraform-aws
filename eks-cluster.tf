@@ -6,7 +6,7 @@
 #
 
 resource "aws_iam_role" "dockup-cluster" {
-  name = "terraform-eks-dockup-cluster"
+  name = "${var.cluster-name}-cluster"
 
   assume_role_policy = <<POLICY
 {
@@ -35,7 +35,7 @@ resource "aws_iam_role_policy_attachment" "dockup-cluster-AmazonEKSServicePolicy
 }
 
 resource "aws_security_group" "dockup-cluster" {
-  name        = "terraform-eks-dockup-cluster"
+  name        = "${var.cluster-name}-cluster"
   description = "Cluster communication with worker nodes"
   vpc_id      = "${aws_vpc.dockup.id}"
 
@@ -47,7 +47,7 @@ resource "aws_security_group" "dockup-cluster" {
   }
 
   tags = {
-    Name = "terraform-eks-dockup"
+    Name = "${var.cluster-name}"
   }
 }
 
