@@ -3,7 +3,7 @@
 #
 
 variable "cluster-name" {
-  default = "terraform-eks-dockup"
+  default = "eks-dockup"
   type    = "string"
 }
 
