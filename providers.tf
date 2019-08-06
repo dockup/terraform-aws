@@ -3,6 +3,7 @@
 #
 
 provider "aws" {
+  version = "~> v2.22.0"
   region = "us-west-2"
 }
 
