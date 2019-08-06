@@ -65,3 +65,21 @@ resource "aws_eks_cluster" "dockup" {
     "aws_iam_role_policy_attachment.eks-cluster-AmazonEKSServicePolicy",
   ]
 }
+
+data "aws_eks_cluster_auth" "dockup" {
+  name = "${aws_eks_cluster.dockup.name}"
+}
+
+resource "kubernetes_config_map" "eks-nodes" {
+  metadata {
+    name = "aws-auth"
+    namespace = "kube-system"
+  }
+
+  # Generated mapRoles using https://github.com/sl1pm4t/k2tf
+  data = {
+    mapRoles = "- rolearn: ${aws_iam_role.eks-nodes.arn}\n  username: system:node:{{EC2PrivateDNSName}}\n  groups:\n    - system:bootstrappers\n    - system:nodes\n"
+  }
+
+  depends_on = [aws_autoscaling_group.eks-nodes]
+}

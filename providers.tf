@@ -12,3 +12,13 @@ provider "aws" {
 data "aws_region" "current" {}
 
 data "aws_availability_zones" "available" {}
+
+
+# Kubernetes provider for attaching nodes to EKS cluster
+# programatically
+provider "kubernetes" {
+  host = "${aws_eks_cluster.dockup.endpoint}"
+  cluster_ca_certificate = "${base64decode(aws_eks_cluster.dockup.certificate_authority.0.data)}"
+  token = "${data.aws_eks_cluster_auth.dockup.token}"
+  load_config_file = false
+}
