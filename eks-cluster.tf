@@ -51,6 +51,16 @@ resource "aws_security_group" "eks-cluster" {
   }
 }
 
+resource "aws_security_group_rule" "eks-cluster-ingress-nodes-https" {
+  description              = "Allow pods to communicate with the cluster API Server"
+  from_port                = 443
+  protocol                 = "tcp"
+  security_group_id        = "${aws_security_group.eks-cluster.id}"
+  source_security_group_id = "${aws_security_group.eks-nodes.id}"
+  to_port                  = 443
+  type                     = "ingress"
+}
+
 resource "aws_eks_cluster" "dockup" {
   name     = "${var.cluster-name}"
   role_arn = "${aws_iam_role.eks-cluster.arn}"

@@ -41,6 +41,32 @@ resource "aws_iam_role_policy_attachment" "eks-nodes-AmazonEC2ContainerRegistryR
   role       = "${aws_iam_role.eks-nodes.name}"
 }
 
+# For autoscaling of nodes via EKS cluster
+resource "aws_iam_role_policy" "eks-nodes-autoscalingNodeGroups" {
+  name = "tf-${var.cluster-name}-nodes-autoscaling-policy"
+  role = "${aws_iam_role.eks-nodes.id}"
+
+  policy = <<POLICY
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "autoscaling:DescribeAutoScalingGroups",
+                "autoscaling:DescribeAutoScalingInstances",
+                "autoscaling:DescribeLaunchConfigurations",
+                "autoscaling:DescribeTags",
+                "autoscaling:SetDesiredCapacity",
+                "autoscaling:TerminateInstanceInAutoScalingGroup"
+            ],
+            "Resource": "*"
+        }
+    ]
+}
+POLICY
+}
+
 resource "aws_iam_instance_profile" "eks-nodes" {
   name = "tf-${var.cluster-name}-nodes"
   role = "${aws_iam_role.eks-nodes.name}"
@@ -140,6 +166,12 @@ resource "aws_autoscaling_group" "eks-nodes" {
   tag {
     key                 = "kubernetes.io/cluster/${var.cluster-name}"
     value               = "owned"
+    propagate_at_launch = true
+  }
+
+  tag {
+    key                 = "k8s.io/cluster-autoscaler/enabled"
+    value               = "true"
     propagate_at_launch = true
   }
 }
