@@ -28,4 +28,6 @@ resource "helm_release" "cluster-autoscaler" {
     name = "rbac.create"
     value= "true"
   }
+
+  timeout = 300
 }
