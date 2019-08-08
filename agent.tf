@@ -20,7 +20,7 @@ resource "helm_release" "dockup-agent" {
   }
 
   timeout = 300
-  depends_on = [kubernetes_deployment.tiller]
+  depends_on = [kubernetes_service_account.tiller]
 }
 
 
@@ -34,5 +34,5 @@ resource "helm_release" "traefik" {
   }
 
   timeout = 300
-  depends_on = [kubernetes_deployment.tiller]
+  depends_on = [kubernetes_service_account.tiller]
 }

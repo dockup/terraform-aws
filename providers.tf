@@ -26,7 +26,7 @@ provider "kubernetes" {
 
 # Helm provider to install agent and dependencies
 provider "helm" {
-  install_tiller = false
+  service_account = "tiller"
 
   kubernetes {
     host = "${aws_eks_cluster.dockup.endpoint}"
