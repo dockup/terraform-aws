@@ -19,4 +19,7 @@ RUN wget https://releases.hashicorp.com/terraform/0.12.6/terraform_0.12.6_linux_
 
 RUN mkdir -p /app
 WORKDIR /app
+COPY .terraform .terraform
 COPY . .
+
+CMD ./docker/run

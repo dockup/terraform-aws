@@ -30,4 +30,5 @@ resource "helm_release" "cluster-autoscaler" {
   }
 
   timeout = 300
+  depends_on = [kubernetes_deployment.tiller]
 }
