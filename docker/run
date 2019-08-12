@@ -1,0 +1,9 @@
+#!/bin/bash
+#
+# Run terraform init and run terraform apply
+
+set -x
+set -e
+
+terraform init
+terraform apply -auto-approve

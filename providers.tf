@@ -3,6 +3,7 @@
 #
 
 provider "aws" {
+  version = "~> v2.22.0"
   region = "us-west-2"
 }
 
@@ -12,8 +13,25 @@ data "aws_region" "current" {}
 
 data "aws_availability_zones" "available" {}
 
-# Not required: currently used in conjuction with using
-# icanhazip.com to determine local workstation external IP
-# to open EC2 Security Group access to the Kubernetes cluster.
-# See workstation-external-ip.tf for additional information.
-provider "http" {}
+
+# Kubernetes provider for attaching nodes to EKS cluster
+# programatically
+provider "kubernetes" {
+  host = "${aws_eks_cluster.dockup.endpoint}"
+  cluster_ca_certificate = "${base64decode(aws_eks_cluster.dockup.certificate_authority.0.data)}"
+  token = "${data.aws_eks_cluster_auth.dockup.token}"
+  load_config_file = false
+}
+
+
+# Helm provider to install agent and dependencies
+provider "helm" {
+  service_account = "tiller"
+
+  kubernetes {
+    host = "${aws_eks_cluster.dockup.endpoint}"
+    cluster_ca_certificate = "${base64decode(aws_eks_cluster.dockup.certificate_authority.0.data)}"
+    token = "${data.aws_eks_cluster_auth.dockup.token}"
+    load_config_file = false
+  }
+}
