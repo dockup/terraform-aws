@@ -1,9 +1,21 @@
 #!/bin/bash
 #
 # Run terraform init and run terraform apply
+#
+# Installing terraform is split into 2 phases.
+# 1. Create infra first, ie VPC, EKS, nodes etc.
+# 2. Install agent and helm charts.
+#
+# For delete, its the opposite. ie delete all
+# installed helm charts, and remove infra.
 
 set -x
 set -e
 
 terraform init
+
+terraform apply -target=module.infra -auto-approve
 terraform apply -auto-approve
+
+# terraform destroy -target=module.sw -auto-approve
+# terraform destroy -auto-approve

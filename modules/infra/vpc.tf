@@ -11,8 +11,8 @@ resource "aws_vpc" "eks-cluster" {
 
   tags = "${
     map(
-      "Name", "tf-${var.cluster-name}",
-      "kubernetes.io/cluster/${var.cluster-name}", "shared",
+      "Name", "tf-${var.cluster_name}",
+      "kubernetes.io/cluster/${var.cluster_name}", "shared",
     )
   }"
 }
@@ -26,8 +26,8 @@ resource "aws_subnet" "eks-cluster" {
 
   tags = "${
     map(
-      "Name", "tf-${var.cluster-name}",
-      "kubernetes.io/cluster/${var.cluster-name}", "shared",
+      "Name", "tf-${var.cluster_name}",
+      "kubernetes.io/cluster/${var.cluster_name}", "shared",
     )
   }"
 }
@@ -36,7 +36,7 @@ resource "aws_internet_gateway" "eks-cluster" {
   vpc_id = "${aws_vpc.eks-cluster.id}"
 
   tags = {
-    Name = "tf-${var.cluster-name}"
+    Name = "tf-${var.cluster_name}"
   }
 }
 

@@ -16,11 +16,11 @@ resource "helm_release" "dockup-agent" {
 
   set {
     name = "agent.dockupApiKey"
-    value = "${var.agent-key}"
+    value = "${var.agent_key}"
   }
 
   timeout = 300
-  depends_on = [kubernetes_service_account.tiller]
+  depends_on = [kubernetes_cluster_role_binding.tiller-cluster-admin]
 }
 
 
@@ -34,5 +34,5 @@ resource "helm_release" "traefik" {
   }
 
   timeout = 300
-  depends_on = [kubernetes_service_account.tiller]
+  depends_on = [kubernetes_cluster_role_binding.tiller-cluster-admin]
 }
