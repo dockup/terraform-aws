@@ -3,7 +3,7 @@
 #  * Create a service account for tiller
 #  * Add cluster binding for tiller
 #
-# NOTE: Make sure that the service account is added as dependency for all
+# NOTE: Make sure that role binding is added as dependency for all
 #       helm chart installations.
 
 resource "kubernetes_service_account" "tiller" {

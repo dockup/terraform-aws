@@ -6,7 +6,7 @@
 #
 
 resource "aws_iam_role" "eks-cluster" {
-  name = "tf-${var.cluster-name}"
+  name = "tf-${var.cluster_name}"
 
   assume_role_policy = <<POLICY
 {
@@ -35,7 +35,7 @@ resource "aws_iam_role_policy_attachment" "eks-cluster-AmazonEKSServicePolicy" {
 }
 
 resource "aws_security_group" "eks-cluster" {
-  name        = "tf-${var.cluster-name}"
+  name        = "tf-${var.cluster_name}"
   description = "Cluster communication with worker nodes"
   vpc_id      = "${aws_vpc.eks-cluster.id}"
 
@@ -47,7 +47,7 @@ resource "aws_security_group" "eks-cluster" {
   }
 
   tags = {
-    Name = "tf-${var.cluster-name}"
+    Name = "tf-${var.cluster_name}"
   }
 }
 
@@ -62,7 +62,7 @@ resource "aws_security_group_rule" "eks-cluster-ingress-nodes-https" {
 }
 
 resource "aws_eks_cluster" "dockup" {
-  name     = "${var.cluster-name}"
+  name     = "${var.cluster_name}"
   role_arn = "${aws_iam_role.eks-cluster.arn}"
 
   vpc_config {

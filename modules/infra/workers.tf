@@ -8,7 +8,7 @@
 #
 
 resource "aws_iam_role" "eks-nodes" {
-  name = "tf-${var.cluster-name}-nodes"
+  name = "tf-${var.cluster_name}-nodes"
 
   assume_role_policy = <<POLICY
 {
@@ -43,7 +43,7 @@ resource "aws_iam_role_policy_attachment" "eks-nodes-AmazonEC2ContainerRegistryR
 
 # For autoscaling of nodes via EKS cluster
 resource "aws_iam_role_policy" "eks-nodes-autoscalingNodeGroups" {
-  name = "tf-${var.cluster-name}-nodes-autoscaling-policy"
+  name = "tf-${var.cluster_name}-nodes-autoscaling-policy"
   role = "${aws_iam_role.eks-nodes.id}"
 
   policy = <<POLICY
@@ -68,12 +68,12 @@ POLICY
 }
 
 resource "aws_iam_instance_profile" "eks-nodes" {
-  name = "tf-${var.cluster-name}-nodes"
+  name = "tf-${var.cluster_name}-nodes"
   role = "${aws_iam_role.eks-nodes.name}"
 }
 
 resource "aws_security_group" "eks-nodes" {
-  name        = "tf-${var.cluster-name}-nodes"
+  name        = "tf-${var.cluster_name}-nodes"
   description = "Security group for all nodes in the cluster"
   vpc_id      = "${aws_vpc.eks-cluster.id}"
 
@@ -86,8 +86,8 @@ resource "aws_security_group" "eks-nodes" {
 
   tags = "${
     map(
-     "Name", "tf-${var.cluster-name}-nodes",
-     "kubernetes.io/cluster/${var.cluster-name}", "owned",
+     "Name", "tf-${var.cluster_name}-nodes",
+     "kubernetes.io/cluster/${var.cluster_name}", "owned",
     )
   }"
 }
@@ -131,7 +131,7 @@ locals {
   eks-node-userdata = <<USERDATA
 #!/bin/bash
 set -o xtrace
-/etc/eks/bootstrap.sh --apiserver-endpoint '${aws_eks_cluster.dockup.endpoint}' --b64-cluster-ca '${aws_eks_cluster.dockup.certificate_authority.0.data}' '${var.cluster-name}'
+/etc/eks/bootstrap.sh --apiserver-endpoint '${aws_eks_cluster.dockup.endpoint}' --b64-cluster-ca '${aws_eks_cluster.dockup.certificate_authority.0.data}' '${var.cluster_name}'
 USERDATA
 }
 
@@ -154,17 +154,17 @@ resource "aws_autoscaling_group" "eks-nodes" {
   launch_configuration = "${aws_launch_configuration.eks-nodes.id}"
   max_size             = 5
   min_size             = 1
-  name                 = "tf-${var.cluster-name}"
+  name                 = "tf-${var.cluster_name}"
   vpc_zone_identifier  = "${aws_subnet.eks-cluster[*].id}"
 
   tag {
     key                 = "Name"
-    value               = "tf-${var.cluster-name}"
+    value               = "tf-${var.cluster_name}"
     propagate_at_launch = true
   }
 
   tag {
-    key                 = "kubernetes.io/cluster/${var.cluster-name}"
+    key                 = "kubernetes.io/cluster/${var.cluster_name}"
     value               = "owned"
     propagate_at_launch = true
   }

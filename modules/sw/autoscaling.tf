@@ -11,12 +11,12 @@ resource "helm_release" "cluster-autoscaler" {
 
   set {
     name = "autoDiscovery.clusterName"
-    value = "${aws_eks_cluster.dockup.name}"
+    value = "${var.cluster_name}"
   }
 
   set {
     name = "awsRegion"
-    value = "${data.aws_region.current.name}"
+    value = "${var.cluster_region}"
   }
 
   set {
@@ -30,5 +30,5 @@ resource "helm_release" "cluster-autoscaler" {
   }
 
   timeout = 300
-  depends_on = [kubernetes_service_account.tiller]
+  depends_on = [kubernetes_cluster_role_binding.tiller-cluster-admin]
 }
