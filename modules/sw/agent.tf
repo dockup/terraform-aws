@@ -13,10 +13,46 @@ data "helm_repository" "dockup" {
 resource "helm_release" "dockup-agent" {
   name = "dockup-agent"
   chart = "dockup/agent"
+  version = "0.3.0"
 
   set {
     name = "agent.dockupApiKey"
     value = "${var.agent_key}"
+  }
+
+  set {
+    name = "secrets.pullSecretEnabled"
+    value = var.pull_secret_enabled
+  }
+
+  set {
+    name = "secrets.pullServiceAccountKey.projectId"
+    value = "${var.pull_secret_account_project_id}"
+  }
+
+  set {
+    name = "secrets.pullServiceAccountKey.privateKeyId"
+    value = "${var.pull_secret_account_private_key_id}"
+  }
+
+  set {
+    name = "secrets.pullServiceAccountKey.privateKey"
+    value = "${var.pull_secret_account_private_key}"
+  }
+
+  set {
+    name = "secrets.pullServiceAccountKey.clientEmail"
+    value = "${var.pull_secret_account_client_email}"
+  }
+
+  set {
+    name = "secrets.pullServiceAccountKey.clientId"
+    value = "${var.pull_secret_account_client_id}"
+  }
+
+  set {
+    name = "secrets.pullServiceAccountKey.clientX509CertUrl"
+    value = "${var.pull_secret_account_client_cert_url}"
   }
 
   timeout = 300

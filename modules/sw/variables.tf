@@ -34,3 +34,39 @@ variable "traefik_gandiv5_key" {
   default = "gandiv5-key"
   type = "string"
 }
+
+variable "pull_secret_enabled" {
+  default = true
+  type = "boolean"
+}
+
+variable "pull_secret_account_project_id" {
+  default = "gcp-project-id"
+  type = "string"
+}
+
+variable "pull_secret_account_private_key_id" {
+  default = "gcp-private-key-id"
+  type = "string"
+}
+
+# Make sure that \n is replaced with \\\\n here. Lots of escaping!
+variable "pull_secret_account_private_key" {
+  default = "gcp-private-key-slash-n-separated"
+  type = "string"
+}
+
+variable "pull_secret_account_client_email" {
+  default = "gcp-project-client-email"
+  type = "string"
+}
+
+variable "pull_secret_account_client_id" {
+  default = "gcp-project-client-id"
+  type = "string"
+}
+
+variable "pull_secret_account_client_cert_url" {
+  default = "gcp-project-client-cert-url"
+  type = "string"
+}
