@@ -1,7 +1,7 @@
 #
 # Helm setup to get agent up and running!
 #  * Following https://docs.getdockup.com/how-tos/set-up-dockup-agent-on-aws
-#  * Installs helm chart for traefik, and dockup agent
+#  * Installs helm chart for dockup agent
 #
 
 data "helm_repository" "dockup" {
@@ -17,20 +17,6 @@ resource "helm_release" "dockup-agent" {
   set {
     name = "agent.dockupApiKey"
     value = "${var.agent_key}"
-  }
-
-  timeout = 300
-  depends_on = [kubernetes_cluster_role_binding.tiller-cluster-admin]
-}
-
-
-resource "helm_release" "traefik" {
-  name = "traefik"
-  chart = "stable/traefik"
-
-  set {
-    name = "rbac.enabled"
-    value = "true"
   }
 
   timeout = 300
