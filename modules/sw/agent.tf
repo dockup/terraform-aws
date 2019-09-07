@@ -13,7 +13,7 @@ data "helm_repository" "dockup" {
 resource "helm_release" "dockup-agent" {
   name = "dockup-agent"
   chart = "dockup/agent"
-  version = "0.3.0"
+  version = "0.3.1"
 
   set {
     name = "agent.dockupApiKey"
