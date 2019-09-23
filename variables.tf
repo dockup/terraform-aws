@@ -7,6 +7,11 @@ variable "cluster_name" {
   type    = "string"
 }
 
+variable "cluster_admins_arns" {
+  default = []                  # arns of users
+  type = "list"
+}
+
 variable "agent_key" {
   default = "dockup-api-key"
   type    = "string"

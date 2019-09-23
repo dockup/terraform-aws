@@ -10,6 +10,7 @@ module "infra" {
   source = "./modules/infra"
 
   cluster_name = "${var.cluster_name}"
+  cluster_admins_arns = var.cluster_admins_arns
 }
 
 module "sw" {
