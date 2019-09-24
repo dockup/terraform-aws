@@ -155,7 +155,7 @@ resource "aws_autoscaling_group" "eks-nodes" {
   max_size             = 5
   min_size             = 1
   name                 = "tf-${var.cluster_name}"
-  vpc_zone_identifier  = "${aws_subnet.eks-cluster[*].id}"
+  vpc_zone_identifier  = ["${aws_subnet.eks-cluster[0].id}"]
 
   tag {
     key                 = "Name"

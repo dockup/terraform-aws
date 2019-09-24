@@ -89,6 +89,14 @@ resource "kubernetes_config_map" "eks-nodes" {
   # Generated mapRoles using https://github.com/sl1pm4t/k2tf
   data = {
     mapRoles = "- rolearn: ${aws_iam_role.eks-nodes.arn}\n  username: system:node:{{EC2PrivateDNSName}}\n  groups:\n    - system:bootstrappers\n    - system:nodes\n"
+
+    mapUsers = yamlencode([
+      for admin_arn in var.cluster_admins_arns : {
+        userarn = admin_arn
+        username = element(split("/", admin_arn), 1) # 0 indexed
+        groups = ["system:masters"]
+      }
+    ])
   }
 
   depends_on = [aws_autoscaling_group.eks-nodes]
