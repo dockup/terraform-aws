@@ -21,6 +21,11 @@ module "sw" {
   agent_image_tag = var.agent_image_tag
   agent_pull_secret_base64 = var.agent_pull_secret_base64
 
+  traefik_acme_email = var.traefik_acme_email
+  traefik_wildcard_domain = var.traefik_wildcard_domain
+  traefik_dns_provider = var.traefik_dns_provider
+  traefik_gandiv5_key = var.traefik_gandiv5_key
+
   cluster_name = module.infra.cluster_name
   cluster_region = module.infra.cluster_region
   cluster_host = module.infra.cluster_host
