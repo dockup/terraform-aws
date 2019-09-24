@@ -21,6 +21,11 @@ resource "helm_release" "dockup-agent" {
   }
 
   set {
+    name = "image.tag"
+    value = "${var.agent_image_tag}"
+  }
+
+  set {
     name = "secrets.pullSecretEnabled"
     value = var.pull_secret_enabled
   }
@@ -53,6 +58,11 @@ resource "helm_release" "dockup-agent" {
   set {
     name = "secrets.pullServiceAccountKey.clientX509CertUrl"
     value = "${var.pull_secret_account_client_cert_url}"
+  }
+
+  set {
+    name = "agent.dockupHost"
+    value = "${var.agent_dockup_host}"
   }
 
   timeout = 300

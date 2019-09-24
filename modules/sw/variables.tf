@@ -7,6 +7,16 @@ variable "agent_key" {
   type    = "string"
 }
 
+variable "agent_dockup_host" {
+  default = "getdockup.com"
+  type = "string"
+}
+
+variable "agent_image_tag" {
+  default = "latest"
+  type = "string"
+}
+
 variable "cluster_name" {}
 variable "cluster_region" {}
 variable "cluster_host" {}
@@ -37,7 +47,7 @@ variable "traefik_gandiv5_key" {
 
 variable "pull_secret_enabled" {
   default = true
-  type = "boolean"
+  type = bool
 }
 
 variable "pull_secret_account_project_id" {
