@@ -4,16 +4,11 @@
 #  * Installs helm chart for dockup agent
 #
 
-data "helm_repository" "dockup" {
-    name = "dockup"
-    url  = "https://helm-charts.getdockup.com"
-}
-
-
 resource "helm_release" "dockup-agent" {
   name = "dockup-agent"
-  chart = "dockup/agent"
-  version = "0.3.1"
+  repository = "https://helm-charts.getdockup.com"
+  chart = "agent"
+  version = "0.4.0"
 
   set {
     name = "agent.dockupApiKey"
@@ -26,43 +21,13 @@ resource "helm_release" "dockup-agent" {
   }
 
   set {
-    name = "secrets.pullSecretEnabled"
-    value = var.pull_secret_enabled
-  }
-
-  set {
-    name = "secrets.pullServiceAccountKey.projectId"
-    value = "${var.pull_secret_account_project_id}"
-  }
-
-  set {
-    name = "secrets.pullServiceAccountKey.privateKeyId"
-    value = "${var.pull_secret_account_private_key_id}"
-  }
-
-  set {
-    name = "secrets.pullServiceAccountKey.privateKey"
-    value = "${var.pull_secret_account_private_key}"
-  }
-
-  set {
-    name = "secrets.pullServiceAccountKey.clientEmail"
-    value = "${var.pull_secret_account_client_email}"
-  }
-
-  set {
-    name = "secrets.pullServiceAccountKey.clientId"
-    value = "${var.pull_secret_account_client_id}"
-  }
-
-  set {
-    name = "secrets.pullServiceAccountKey.clientX509CertUrl"
-    value = "${var.pull_secret_account_client_cert_url}"
-  }
-
-  set {
     name = "agent.dockupHost"
     value = "${var.agent_dockup_host}"
+  }
+
+  set {
+    name = "secrets.pullSecretBase64"
+    value = var.agent_pull_secret_base64
   }
 
   timeout = 300

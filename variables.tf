@@ -27,38 +27,8 @@ variable "agent_image_tag" {
   type = string
 }
 
-variable "pull_secret_enabled" {
-  default = false
-  type = bool
-}
-
-variable "pull_secret_account_project_id" {
-  default = "gcp-project-id"
-  type = string
-}
-
-variable "pull_secret_account_private_key_id" {
-  default = "gcp-private-key-id"
-  type = string
-}
-
-variable "pull_secret_account_private_key" {
-  default = "gcp-private-key"
-  type = string
-}
-
-variable "pull_secret_account_client_email" {
-  default = "gcp-account-email"
-  type = string
-}
-
-variable "pull_secret_account_client_id" {
-  default = "gcp-account-id"
-  type = string
-}
-
-variable "pull_secret_account_client_cert_url" {
-  default = "gcp-secret-cert-url"
+variable "agent_pull_secret_base64" {
+  default = ""
   type = string
 }
 
