@@ -11,6 +11,16 @@ variable "cluster_admins_arns" {
   type = list(string)
 }
 
+variable "persistence_ebs_volumes_count" {
+  default = 0
+  type = number
+}
+
+variable "persistence_ebs_volumes_size" {
+  default = 1
+  type = number
+}
+
 # Configure Agent
 variable "agent_key" {
   default = "dockup-agent-key"
