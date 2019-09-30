@@ -56,3 +56,7 @@ output "cluster_cert" {
 output "cluster_token" {
   value = "${data.aws_eks_cluster_auth.dockup.token}"
 }
+
+output "persistence_ids" {
+  value = "${aws_ebs_volume.persistence[*].id}"
+}
