@@ -21,19 +21,3 @@ variable "persistence_ebs_volumes_size" {
   default = 1
   type = number
 }
-
-# Configure RDS
-variable "pg_user" {
-  default = "dockup_user"
-  type = string
-}
-
-variable "pg_password" {
-  default = "sup3rs3cr3tpAssw0rd"
-  type = string
-}
-
-variable "pg_port" {
-  default = 5432
-  type = number
-}
