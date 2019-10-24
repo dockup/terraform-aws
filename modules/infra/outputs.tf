@@ -60,3 +60,8 @@ output "cluster_token" {
 output "persistence_ids" {
   value = "${aws_ebs_volume.persistence[*].id}"
 }
+
+output "this_db_instance_endpoint" {
+  description = "The RDS DB connection endpoint"
+  value       = "${module.db.this_db_instance_endpoint}"
+}

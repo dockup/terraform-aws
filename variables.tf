@@ -63,3 +63,21 @@ variable "traefik_gandiv5_key" {
   default = "gandi-pai-key"
   type = string
 }
+
+
+# Configure RDS
+variable "pg_user" {
+  default = "dockup_user"
+  type = string
+}
+
+variable "pg_password" {
+  default = "sup3rs3cr3tpAssw0rd"
+  type = string
+}
+
+variable "pg_port" {
+  default = 5432
+  type = number
+}
+
