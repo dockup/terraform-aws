@@ -20,6 +20,8 @@ module "sw" {
   agent_dockup_host = var.agent_dockup_host
   agent_image_tag = var.agent_image_tag
   agent_pull_secret_base64 = var.agent_pull_secret_base64
+  agent_timber_source_id = var.agent_timber_source_id
+  agent_timber_api_key = var.agent_timber_api_key
 
   traefik_acme_email = var.traefik_acme_email
   traefik_wildcard_domain = var.traefik_wildcard_domain

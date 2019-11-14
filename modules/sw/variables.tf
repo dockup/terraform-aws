@@ -30,6 +30,16 @@ variable "agent_pull_secret_base64" {
   type = string
 }
 
+variable "agent_timber_source_id" {
+  default = "timber-source-id"
+  type = string
+}
+
+variable "agent_timber_api_key" {
+  default = "timber-api-key"
+  type = string
+}
+
 # Configure Traefik
 variable "traefik_acme_email" {
   default = "dockup@yourdomain.com"

@@ -8,7 +8,7 @@ resource "helm_release" "dockup-agent" {
   name = "dockup-agent"
   repository = "https://helm-charts.getdockup.com"
   chart = "agent"
-  version = "0.4.2"
+  version = "0.4.3"
 
   set {
     name = "agent.dockupApiKey"
@@ -28,6 +28,16 @@ resource "helm_release" "dockup-agent" {
   set {
     name = "secrets.pullSecretBase64"
     value = var.agent_pull_secret_base64
+  }
+
+  set {
+    name = "timberSourceId"
+    value = var.agent_timber_source_id
+  }
+
+  set {
+    name = "timberApiKey"
+    value = var.agent_timber_api_key
   }
 
   timeout = 300
