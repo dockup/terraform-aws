@@ -8,7 +8,7 @@ resource "helm_release" "dockup-agent" {
   name = "dockup-agent"
   repository = "https://helm-charts.getdockup.com"
   chart = "agent"
-  version = "0.4.3"
+  version = "0.4.4"
 
   set {
     name = "agent.dockupApiKey"
