@@ -55,7 +55,7 @@ resource "helm_release" "traefik" {
 
   set {
     name = "acme.email"
-    value = "${var.traefik_acme_email}"
+    value = var.traefik_acme_email
   }
 
   set {
@@ -80,17 +80,17 @@ resource "helm_release" "traefik" {
 
   set {
     name = "acme.domains.domainsList[0].main"
-    value = "${var.traefik_wildcard_domain}"
+    value = var.traefik_wildcard_domain
   }
 
   set {
     name = "acme.dnsProvider.name"
-    value = "${var.traefik_dns_provider}"
+    value = var.traefik_dns_provider
   }
 
   set {
     name = "acme.dnsProvider.gandiv5.GANDIV5_API_KEY"
-    value = "${var.traefik_gandiv5_key}"
+    value = var.traefik_gandiv5_key
   }
 
 

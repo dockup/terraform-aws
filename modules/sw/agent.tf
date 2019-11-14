@@ -12,17 +12,17 @@ resource "helm_release" "dockup-agent" {
 
   set {
     name = "agent.dockupApiKey"
-    value = "${var.agent_key}"
+    value = var.agent_key
   }
 
   set {
     name = "image.tag"
-    value = "${var.agent_image_tag}"
+    value = var.agent_image_tag
   }
 
   set {
     name = "agent.dockupHost"
-    value = "${var.agent_dockup_host}"
+    value = var.agent_dockup_host
   }
 
   set {

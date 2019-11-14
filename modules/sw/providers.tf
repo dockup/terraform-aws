@@ -17,9 +17,9 @@ data "aws_availability_zones" "available" {}
 # Kubernetes provider for attaching nodes to EKS cluster
 # programatically
 provider "kubernetes" {
-  host = "${var.cluster_host}"
-  cluster_ca_certificate = "${var.cluster_cert}"
-  token = "${var.cluster_token}"
+  host = var.cluster_host
+  cluster_ca_certificate = var.cluster_cert
+  token = var.cluster_token
   load_config_file = false
 }
 
@@ -29,9 +29,9 @@ provider "helm" {
   service_account = "tiller"
 
   kubernetes {
-    host = "${var.cluster_host}"
-    cluster_ca_certificate = "${var.cluster_cert}"
-    token = "${var.cluster_token}"
+    host = var.cluster_host
+    cluster_ca_certificate = var.cluster_cert
+    token = var.cluster_token
     load_config_file = false
   }
 }

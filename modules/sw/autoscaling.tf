@@ -11,12 +11,12 @@ resource "helm_release" "cluster-autoscaler" {
 
   set {
     name = "autoDiscovery.clusterName"
-    value = "${var.cluster_name}"
+    value = var.cluster_name
   }
 
   set {
     name = "awsRegion"
-    value = "${var.cluster_region}"
+    value = var.cluster_region
   }
 
   set {

@@ -4,12 +4,12 @@
 
 variable "cluster_name" {
   default = "dockup"
-  type    = "string"
+  type = string
 }
 
 variable "cluster_admins_arns" {
   default = []                  # arns of users
-  type = "list"
+  type = list
 }
 
 variable "persistence_ebs_volumes_count" {
